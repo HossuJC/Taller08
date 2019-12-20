@@ -8,22 +8,22 @@ package Patrones;
 public class Manejador
 {
     protected int monto;
-    protected int denominacion;
+    protected float denominacion;
 
-    public Manejador(int monto, int denominacion){
+    public Manejador(int monto, float denominacion){
         this.monto = monto; // Total de billetes
         this.denominacion = denominacion; // Valor de cada billete
     }
 
     public int getMonto(){ return monto; }
-    public int getDenominacion(){ return denominacion; }
+    public float getDenominacion(){ return denominacion; }
     public void setMonto(int monto){ this.monto = monto; }
 
     public boolean retirar(int monto){
         // Implementar
         return false;
     }
-    public boolean depositar(int monto, int denominacion){
+    public boolean depositar(int monto, float denominacion){
         // Implementar
         return false;
     }
