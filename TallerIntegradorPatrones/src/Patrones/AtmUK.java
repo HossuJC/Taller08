@@ -62,7 +62,7 @@ public class AtmUK {
 		this.dinero = dinero;
 	}
 	//Dentro de las transacciones se debe llamar al ATM para hacer el retiro o deposito de la cuenta correspondiente
-    public static void transaction(Account cuenta){
+    public static void transaction(Account cuenta, AtmUK cajero){
         // here is where most of the work is
         int choice; 
         System.out.println("Please select an option"); 
@@ -77,21 +77,14 @@ public class AtmUK {
                 float amount; 
                 System.out.println("Please enter amount to withdraw: "); 
                 amount = in.nextFloat();
-                if(amount > cuenta.getAmount() || amount == 0){
-                    System.out.println("You have insufficient funds\n\n"); 
-                    anotherTransaction(cuenta); // ask if they want another transaction
-                } else {
-                    // Todo: verificar que se puede realizar el retiro del atm
-
-                    // Todo: actualizar tanto la cuenta como el atm y de los manejadores
-                    // cuenta.retirar(amount);
-                    // AtmUK.sacarDinero(amount);
-
-                    // Todo: Mostrar resumen de transacción o error
-                    // "You have withdrawn "+amount+" and your new balance is "+balance;
-                    anotherTransaction(cuenta); 
-                }
-            break; 
+                WithdrawProcess process = new VerificarCuenta();
+                process.linkWith(new VerificadorCajero()).linkWith(new ActualizadorCuenta());
+                if(process.execute(amount, cuenta, cajero))
+                	System.out.println("You have withdrawn " +amount+" and your new balance is "+cuenta.getAmount());
+                else
+                    System.out.println("Error in transaction");
+                anotherTransaction(cuenta,cajero); 
+                break; 
             case 2:
                     // option number 2 is depositing 
                     float deposit; 
@@ -101,34 +94,34 @@ public class AtmUK {
                     
                     // Todo: Mostrar resumen de transacción o error
                     // "You have withdrawn "+amount+" and your new balance is "+balance;
-                    anotherTransaction(cuenta);
+                    anotherTransaction(cuenta,cajero);
             break; 
             case 3:
                     // Todo: mostrar el balance de la cuenta
                     // "Your balance is "+balance
-                    anotherTransaction(cuenta); 
+                    anotherTransaction(cuenta,cajero); 
             break;
             case 4:
                     // Todo: mostrar el balance del ATM con los billetes en cada manejador
-                    anotherTransaction(cuenta); 
+                    anotherTransaction(cuenta,cajero); 
             break;
             default:
                     System.out.println("Invalid option:\n\n"); 
-                    anotherTransaction(cuenta);
+                    anotherTransaction(cuenta,cajero);
             break;
         }
     }
-    public static void anotherTransaction(Account cuenta){
+    public static void anotherTransaction(Account cuenta, AtmUK cajero){
         System.out.println("Do you want another transaction?\n\nPress 1 for another transaction\n2 To exit");
         Scanner in = new Scanner(System.in);	
         int anotherTransaction = in.nextInt();
         if(anotherTransaction == 1){
-            transaction(cuenta); // call transaction method
+            transaction(cuenta,cajero); // call transaction method
         } else if(anotherTransaction == 2){
             System.out.println("Thanks for choosing us. Good Bye!");
         } else {
             System.out.println("Invalid choice\n\n");
-            anotherTransaction(cuenta);
+            anotherTransaction(cuenta, cajero);
         }
     }
 
