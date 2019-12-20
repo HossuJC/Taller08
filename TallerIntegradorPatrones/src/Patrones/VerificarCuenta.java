@@ -1,6 +1,6 @@
 package Patrones;
 
-public class VerificarCuenta extends WithdrawProcess {
+public class VerificarCuenta extends Process {
 
 	@Override
 	public boolean execute(float amount, Account cuenta, AtmUK cajero) {

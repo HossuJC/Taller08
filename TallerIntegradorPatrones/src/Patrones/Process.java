@@ -1,9 +1,9 @@
 package Patrones;
 
-public abstract class WithdrawProcess {
-	private WithdrawProcess next;
+public abstract class Process {
+	private Process next;
 	
-	public WithdrawProcess linkWith(WithdrawProcess next) {
+	public Process linkWith(Process next) {
 		this.next = next;
 		return next;
 	}

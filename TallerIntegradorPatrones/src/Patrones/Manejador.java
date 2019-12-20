@@ -20,11 +20,15 @@ public class Manejador
     public void setMonto(int monto){ this.monto = monto; }
 
     public boolean retirar(int monto){
-        // Implementar
-        return false;
+        if(this.monto < monto)
+        	return false;
+        this.monto -= monto;
+        return true;
     }
     public boolean depositar(int monto, float denominacion){
-        // Implementar
-        return false;
+        if (this.denominacion == denominacion)
+        	return false;
+        this.monto += monto;
+        return true;
     }
 }

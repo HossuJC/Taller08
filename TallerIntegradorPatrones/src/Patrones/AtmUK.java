@@ -31,9 +31,16 @@ public class AtmUK {
     }
 
     // -----------------
-    public void ingresarDinero(double dinero, int denominacion) {
+    public void ingresarDinero(double dinero, float denominacion) {
         this.dinero += dinero;
-        // Todo: Sólo se puede depositar billetes de una sola denominación y agregarse al manejador correspondiente
+        int temporal = (int) (dinero/denominacion);
+        Manejador m;
+        if((m = buscarManejador(denominacion)) != null) {
+        	m.depositar(temporal, denominacion);
+        } else {
+        	m = new Manejador(temporal,denominacion);
+        	addManejador(m);
+        }
     }
 
     public void addManejador(Manejador m){
@@ -41,6 +48,13 @@ public class AtmUK {
     }
     public Manejador removeManejador(int i){
         return manejadores.remove(i);
+    }
+    
+    public Manejador buscarManejador(float denominacion) {
+    	for(Manejador manejador: this.manejadores) 
+    		if(manejador.getDenominacion() == denominacion)
+    			return manejador;
+    	return null;
     }
 
     public ArrayList<Manejador> getManejadores() {
@@ -61,69 +75,7 @@ public class AtmUK {
 	public void setDinero(double dinero) {
 		this.dinero = dinero;
 	}
-	//Dentro de las transacciones se debe llamar al ATM para hacer el retiro o deposito de la cuenta correspondiente
-    public static void transaction(Account cuenta, AtmUK cajero){
-        // here is where most of the work is
-        int choice; 
-        System.out.println("Please select an option"); 
-        System.out.println("1. Withdraw");
-        System.out.println("2. Deposit");
-        System.out.println("3. Balance");
-        System.out.println("4. Balance ATM");
-        Scanner in = new Scanner(System.in);
-        choice = in.nextInt();
-        switch(choice){
-            case 1:
-                float amount; 
-                System.out.println("Please enter amount to withdraw: "); 
-                amount = in.nextFloat();
-                WithdrawProcess process = new VerificarCuenta();
-                process.linkWith(new VerificadorCajero()).linkWith(new ActualizadorCuenta());
-                if(process.execute(amount, cuenta, cajero))
-                	System.out.println("You have withdrawn " +amount+" and your new balance is "+cuenta.getAmount());
-                else
-                    System.out.println("Error in transaction");
-                anotherTransaction(cuenta,cajero); 
-                break; 
-            case 2:
-                    // option number 2 is depositing 
-                    float deposit; 
-                    System.out.println("Please enter amount you would wish to deposit: "); 
-                    deposit = in.nextFloat();
-                    // Todo: actualizar tanto la cuenta como el atm
-                    
-                    // Todo: Mostrar resumen de transacción o error
-                    // "You have withdrawn "+amount+" and your new balance is "+balance;
-                    anotherTransaction(cuenta,cajero);
-            break; 
-            case 3:
-                    // Todo: mostrar el balance de la cuenta
-                    // "Your balance is "+balance
-                    anotherTransaction(cuenta,cajero); 
-            break;
-            case 4:
-                    // Todo: mostrar el balance del ATM con los billetes en cada manejador
-                    anotherTransaction(cuenta,cajero); 
-            break;
-            default:
-                    System.out.println("Invalid option:\n\n"); 
-                    anotherTransaction(cuenta,cajero);
-            break;
-        }
-    }
-    public static void anotherTransaction(Account cuenta, AtmUK cajero){
-        System.out.println("Do you want another transaction?\n\nPress 1 for another transaction\n2 To exit");
-        Scanner in = new Scanner(System.in);	
-        int anotherTransaction = in.nextInt();
-        if(anotherTransaction == 1){
-            transaction(cuenta,cajero); // call transaction method
-        } else if(anotherTransaction == 2){
-            System.out.println("Thanks for choosing us. Good Bye!");
-        } else {
-            System.out.println("Invalid choice\n\n");
-            anotherTransaction(cuenta, cajero);
-        }
-    }
+	
 
     
 }
