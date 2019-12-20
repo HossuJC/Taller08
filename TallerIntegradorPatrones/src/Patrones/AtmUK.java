@@ -27,7 +27,20 @@ public class AtmUK {
     // -----------------
     public void sacarDinero(double dinero) {
         this.dinero -= dinero;
-        // Todo: realizar el proceso de sacar de cada manejador la cantidad requerida
+        int i = 0;
+        while(dinero>0 && i<manejadores.size()) {
+        	Manejador m = manejadores.get(i++);
+        	int temp = (int) (dinero/m.getDenominacion());
+        	int cantidad = m.getMonto();
+        	int resultado;
+        	if(cantidad>0 && temp>0) {
+        		if(cantidad > temp)
+        			resultado = cantidad - temp;
+        		else
+        			resultado = 0;
+        		m.setMonto(resultado);
+        	}
+        }
     }
 
     // -----------------
